@@ -28,6 +28,9 @@ STAGES = {
     "A1": ("norm_pre",),
     "A2": ("norm_pre", "norm_gated"),
     "A3": ("norm_pre", "norm_gated", "norm_f"),
+    # gated norms alone: replacing pre + gated together from the pretrained model
+    # overflowed to NaN before step 0 for Paths A and P, so judge the gated site by itself
+    "G1": ("norm_gated",),
 }
 
 # Path B uses the same staging; only the operator differs.

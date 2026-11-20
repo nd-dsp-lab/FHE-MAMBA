@@ -1,0 +1,75 @@
+{
+  "stage": "G1",
+  "teacher_ppl": {
+    "512": 23.806429924878294,
+    "2048": 20.237016928594926
+  },
+  "student_before_ppl": {
+    "512": 260.20255768231505,
+    "2048": 244.57490305918427
+  },
+  "student_after_ppl": {
+    "512": 27.86280031957048,
+    "2048": 23.80913970543121
+  },
+  "student_after_ppl_20bit": {
+    "512": 27.862795105697028,
+    "2048": 23.80914131457033
+  },
+  "delta_vs_teacher": {
+    "512": 4.056370394692184,
+    "2048": 3.5721227768362844
+  },
+  "path": "A",
+  "poly_degree": null,
+  "levels_per_instance": 0,
+  "t_steps": null,
+  "lambda_range": null,
+  "n_instances_replaced": 24,
+  "n_trainable": 90132504,
+  "training_seconds": 1680.7059018611908,
+  "training_hours": 0.46686275051699744,
+  "optimiser_steps": 610,
+  "peak_gpu_memory_gb": 8.768716812133789,
+  "learned_c": {
+    "norm_gated_0": 0.550255298614502,
+    "norm_gated_1": 15.327364921569824,
+    "norm_gated_2": 13.215704917907715,
+    "norm_gated_3": 34.69570541381836,
+    "norm_gated_4": 13.7713623046875,
+    "norm_gated_5": 19.404003143310547,
+    "norm_gated_6": 5.639117240905762,
+    "norm_gated_7": 30.333324432373047,
+    "norm_gated_8": 13.87562370300293,
+    "norm_gated_9": 9.03371810913086,
+    "norm_gated_10": 6.7070512771606445,
+    "norm_gated_11": 18.305849075317383,
+    "norm_gated_12": 28.33330535888672,
+    "norm_gated_13": 2.3418049812316895,
+    "norm_gated_14": 0.7692453861236572,
+    "norm_gated_15": 17.997722625732422,
+    "norm_gated_16": 1.761205792427063,
+    "norm_gated_17": 11.58664608001709,
+    "norm_gated_18": 7.217871189117432,
+    "norm_gated_19": 2.4648749828338623,
+    "norm_gated_20": 4.694527626037598,
+    "norm_gated_21": 0.9429422616958618,
+    "norm_gated_22": 0.22740916907787323,
+    "norm_gated_23": 0.12352750450372696
+  },
+  "lambda_lm": 1.0,
+  "lambda_kd": 1.0,
+  "lambda_aux": 1.0,
+  "temperature": 2.0,
+  "unfreeze": "adjacent",
+  "backbone_lr": 2e-05,
+  "ramp": {
+    "norm_gated": [
+      0.0,
+      0.3
+    ]
+  },
+  "control": false,
+  "token_budget": 5000000,
+  "poly_init": null
+}

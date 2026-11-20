@@ -1,0 +1,80 @@
+{
+  "stage": "A1",
+  "teacher_ppl": {
+    "512": 23.806429640528165,
+    "2048": 20.237016606779072
+  },
+  "student_before_ppl": {
+    "512": 239.67894509673678,
+    "2048": 215.84783635332587
+  },
+  "student_after_ppl": {
+    "512": 24.431869432011432,
+    "2048": 20.887606192100744
+  },
+  "student_after_ppl_20bit": {
+    "512": 24.431867583814736,
+    "2048": 20.887605361696394
+  },
+  "delta_vs_teacher": {
+    "512": 0.6254397914832666,
+    "2048": 0.6505895853216721
+  },
+  "path": "A",
+  "poly_degree": null,
+  "levels_per_instance": 0,
+  "t_steps": null,
+  "lambda_range": null,
+  "n_instances_replaced": 24,
+  "n_trainable": 90114072,
+  "training_seconds": 6697.7832362651825,
+  "training_hours": 1.860495343406995,
+  "optimiser_steps": 2441,
+  "peak_gpu_memory_gb": 8.424315929412842,
+  "learned_c": {
+    "norm_pre_0": 0.3737644851207733,
+    "norm_pre_1": 2.7421064376831055,
+    "norm_pre_2": 3.311046600341797,
+    "norm_pre_3": 3.428706645965576,
+    "norm_pre_4": 3.9720051288604736,
+    "norm_pre_5": 4.383709907531738,
+    "norm_pre_6": 4.869433879852295,
+    "norm_pre_7": 5.20263147354126,
+    "norm_pre_8": 5.733949184417725,
+    "norm_pre_9": 6.254410266876221,
+    "norm_pre_10": 7.256000995635986,
+    "norm_pre_11": 7.520760536193848,
+    "norm_pre_12": 8.410840034484863,
+    "norm_pre_13": 9.057088851928711,
+    "norm_pre_14": 9.922418594360352,
+    "norm_pre_15": 10.335678100585938,
+    "norm_pre_16": 11.718522071838379,
+    "norm_pre_17": 12.449854850769043,
+    "norm_pre_18": 13.772601127624512,
+    "norm_pre_19": 15.478816032409668,
+    "norm_pre_20": 17.26688003540039,
+    "norm_pre_21": 19.487346649169922,
+    "norm_pre_22": 23.573762893676758,
+    "norm_pre_23": 33.209625244140625
+  },
+  "lambda_lm": 1.0,
+  "lambda_kd": 1.0,
+  "lambda_aux": 1.0,
+  "temperature": 2.0,
+  "unfreeze": "adjacent",
+  "backbone_lr": 2e-05,
+  "ramp": {
+    "norm_pre": [
+      0.0,
+      0.3
+    ]
+  },
+  "control": false,
+  "token_budget": 20000000,
+  "poly_init": null,
+  "clamp_fraction": {},
+  "ckks_ranges": null,
+  "ckks_choices": null,
+  "init_from": null,
+  "cheb_target": null
+}
