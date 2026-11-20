@@ -28,7 +28,7 @@
 # applied correctly.
 # qsub does not forward your shell environment unless you pass -V, so give the
 # two paths a default here. Override by exporting them and submitting with -V.
-: "${FHEMAMBA_CONDA_ENV:=$HOME/.conda/envs/pdpo}"
+: "${FHEMAMBA_CONDA_ENV:=/groups/tjung/$USER/envs/fhemamba}"
 : "${HF_HOME:=/groups/tjung/$USER/FHEMAMBA/hf-cache}"
 export FHEMAMBA_CONDA_ENV HF_HOME
 

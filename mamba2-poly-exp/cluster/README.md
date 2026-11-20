@@ -9,7 +9,7 @@ these once (e.g. in `~/.bashrc` on the login node):
 export NETID=your_netid
 export FHEMAMBA_GROUP=/groups/<your_group>/$NETID      # 5 TB group space
 export FHEMAMBA_ROOT=$FHEMAMBA_GROUP/FHEMAMBA          # where this repo lives
-export FHEMAMBA_CONDA_ENV=$HOME/.conda/envs/<env>      # must have torch + mamba_ssm
+export FHEMAMBA_CONDA_ENV=$FHEMAMBA_GROUP/envs/fhemamba  # built by cluster/make_env.sh; env.sh defaults to it
 ```
 
 ### The notification address
@@ -103,10 +103,25 @@ perplexity — not on a direct comparison against the fused Triton kernel, becau
 that comparison needs CUDA. If job 1 fails, stop and fix it before reading any
 other number.
 
-## Environment: reuse `pdpo`, do not build a new one
+## Environment: the project's own `fhemamba` env
 
-**Verified on the node, 2026-09-18.** `${FHEMAMBA_CONDA_ENV}` already has
-everything this project needs:
+FHEMAMBA has its own env at `/groups/tjung/$USER/envs/fhemamba`, in the group
+space beside the repo. Build it **once, by hand, on `crcfe01`**:
+
+```bash
+cd $FHEMAMBA_ROOT && bash cluster/make_env.sh
+```
+
+It used to borrow `pdpo`, the DP-GRPO project's env. That coupled the projects:
+`causal_conv1d` could not be added without changing which conv path DP-GRPO's
+running jobs take, and any upgrade over there could move our numbers. The new env
+is a **clone** of `pdpo`, so it starts on exactly the versions every existing
+result used. `make_env.sh` checks that `pip freeze` matches `pdpo` line for line,
+then writes `cluster/env-lock/{pip-freeze.txt,conda-explicit.txt}`. Conda's
+package cache and pip's cache also go to the group space, so nothing lands on
+`$HOME`. `env.sh` picks the env up automatically when `FHEMAMBA_CONDA_ENV` is unset.
+
+**Versions (from `pdpo`, verified on the node 2026-09-18):**
 
 | package | version |
 |---|---|
@@ -117,7 +132,8 @@ everything this project needs:
 | transformers / einops / pyarrow / numpy | present |
 | causal_conv1d | **missing — and that is fine**, `real_mamba/nn_ref.py` has a pure-torch conv |
 
-**Do not `conda create` a new env, and never install from inside a batch job.**
+**Never build an env or install anything from inside a batch job** (`make_env.sh`
+refuses when `$JOB_ID` is set), and never put an env under `$HOME`.
 
 This is not a style preference. On 2026-09-19 `cluster/env.sh` did exactly that:
 it ran `conda create` + `pip install torch` on a `$HOME` with 5.5 GB free, built
@@ -162,8 +178,8 @@ qhost -F gpu_card -h qa-rtx6k-019.crc.nd.edu | tail -1   # hc:gpu_card=N free
 
 | filesystem | size | used | why |
 |---|---|---|---|
-| `/groups` | 5.0 T | 4% | code, `runs/`, `logs/`, and this project's HF cache |
-| `$HOME` | 100 G | 56% | conda envs only; it has been at 96%+ twice |
+| `/groups` | 5.0 T | 4% | code, `runs/`, `logs/`, this project's HF cache, and its env (`envs/fhemamba`) |
+| `$HOME` | 100 G | 56% | other projects' conda envs (`pdpo`); it has been at 96%+ twice |
 
 `$HOME` does **not** hold a copy any more. `~/FHEMAMBA` is a *different*, older
 repo (github `jennazhao7/FHEMAMBA`) — never rsync over it.

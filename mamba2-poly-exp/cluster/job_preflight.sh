@@ -25,7 +25,7 @@
 #
 # It answers, in order:
 #   1. did we land on the RTX 6000, and how much memory does it really have?
-#   2. does the pre-built `pdpo` conda env import torch+CUDA and mamba_ssm?
+#   2. does the project conda env (cluster/make_env.sh) import torch+CUDA and mamba_ssm?
 #   3. does the whole test suite pass HERE, including the CUDA-only tests that
 #      are skipped on the laptop? -> the parity gate is
 #      TestOfficialSSDParity: our scan vs mamba_chunk_scan_combined

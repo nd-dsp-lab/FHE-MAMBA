@@ -11,7 +11,9 @@
 # inside a batch job, ever. If something is missing, this script says so and
 # exits, and a human installs it deliberately.
 #
-# We reuse ${FHEMAMBA_CONDA_ENV}, which already has everything:
+# The env is FHEMAMBA's own, built once by hand with cluster/make_env.sh at
+# /groups/tjung/$USER/envs/fhemamba (a clone of DP-GRPO's `pdpo`, which we used
+# to borrow). It has:
 #   python 3.10.18, torch 2.3.1+cu121, triton 2.3.1, mamba_ssm 2.2.2,
 #   transformers, einops, pyarrow, numpy.
 # `causal_conv1d` is absent and that is fine -- real_mamba/nn_ref.py has a
@@ -25,19 +27,25 @@ _ENV_SH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 FHEMAMBA_ROOT="${FHEMAMBA_ROOT:-$(dirname "$_ENV_SH_DIR")}"
 export FHEMAMBA_ROOT
 
-# There is no sensible default for the conda env -- it is per-user and must have
-# torch. An earlier version of this file had a SELF-REFERENTIAL default here
+# Default: the project env that make_env.sh builds beside the repo, if it exists.
+# An earlier version of this file had a SELF-REFERENTIAL default here
 # (`${FHEMAMBA_CONDA_ENV:-${FHEMAMBA_CONDA_ENV}}`), a scrubbing accident that
 # resolved to the empty string and killed two submitted jobs with
 # `no python at /bin/python`. It now fails with an actionable message instead.
+FHEMAMBA_ENV_DEFAULT="$(dirname "$FHEMAMBA_ROOT")/envs/fhemamba"
 FHEMAMBA_CONDA_ENV="${FHEMAMBA_CONDA_ENV:-}"
+if [ -z "$FHEMAMBA_CONDA_ENV" ] && [ -x "$FHEMAMBA_ENV_DEFAULT/bin/python" ]; then
+  FHEMAMBA_CONDA_ENV="$FHEMAMBA_ENV_DEFAULT"
+fi
 if [ -z "$FHEMAMBA_CONDA_ENV" ]; then
   # last resort: an already-activated conda env
   FHEMAMBA_CONDA_ENV="${CONDA_PREFIX:-}"
 fi
 if [ -z "$FHEMAMBA_CONDA_ENV" ]; then
-  echo "FATAL: FHEMAMBA_CONDA_ENV is not set and no conda env is active."
-  echo "       export FHEMAMBA_CONDA_ENV=/path/to/an/env/with/torch"
+  echo "FATAL: FHEMAMBA_CONDA_ENV is not set, $FHEMAMBA_ENV_DEFAULT does not exist,"
+  echo "       and no conda env is active."
+  echo "       Build the project env once, by hand on crcfe01: bash cluster/make_env.sh"
+  echo "       or: export FHEMAMBA_CONDA_ENV=/path/to/an/env/with/torch"
   echo "       (and remember qsub does not forward your environment unless you pass -V)"
   return 1 2>/dev/null || exit 1
 fi
