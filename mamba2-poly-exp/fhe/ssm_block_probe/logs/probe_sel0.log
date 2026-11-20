@@ -1,0 +1,19 @@
+== HE-native SSM block, OpenFHE CKKS 128-bit, threads 20
+ring 65536, slots 32768, depth 19, log2 Q 1011
+D 128, L 512, d_inner 256, heads 4 (selective 0), headdim 64, d_state 16, 32 sequences per ciphertext
+keygen (41 rotation keys) 4.291 s, peak RSS 5.073 GB
+plaintext level check: worst abs error 7.882e-10  ok
+
+stage               time s     level after
+in_proj              303.2               0
+conv+act             32.57               3
+decay+b               17.1               4
+scan                 100.9              13
+readout+gate         8.079              15
+out_proj             22.86              16
+
+block 484.7 s (client encrypt 0.7114 s, decrypt 0.08593 s)
+levels consumed 16 of 19  (sim.py predicts 17)
+ops: ct-ct 312, ct-pt 7328, ct-scalar 1256, rotations 1644, adds 8564  (compare sim.py)
+max abs error 2.741e-10 = 7.861e-10 relative to max |out| (30.24 bits), rms 2.869e-11
+peak RSS 11.66 GB

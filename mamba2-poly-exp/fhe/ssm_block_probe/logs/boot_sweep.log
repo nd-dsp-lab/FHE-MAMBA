@@ -1,0 +1,48 @@
+== levels 19 budget 4,4 iters 2
+== bootstrap probe: levels after bootstrap 19, budget {4,4}, iterations 2, scale 59 bits, total depth 42, ring 131072, log2 Q 2538
+setup + keygen 50.8409 s, peak RSS 55.4676 GB
+1 iteration: 49.2253 s, worst 9.58676 bits, rms 11.8765 bits, levels left 21
+2 iterations (precision hint 11): 101.922 s, worst 20.4223 bits, rms 22.8814 bits, levels left 20
+SUMMARY ring 131072 budget 4,4 iters 2 scale 59 levels_after_req 19 levels_left 20 boot_s 101.922 worst_bits 20.4223 rms_bits 22.8814 per_block_s 407.689 peak_rss_gb 56.398
+== levels 12 budget 3,3 iters 2
+== bootstrap probe: levels after bootstrap 12, budget {3,3}, iterations 2, scale 59 bits, total depth 33, ring 131072, log2 Q 2007
+setup + keygen 49.9148 s, peak RSS 47.708 GB
+1 iteration: 45.3592 s, worst 9.74168 bits, rms 11.8952 bits, levels left 14
+2 iterations (precision hint 11): 93.4538 s, worst 20.6475 bits, rms 22.903 bits, levels left 13
+SUMMARY ring 131072 budget 3,3 iters 2 scale 59 levels_after_req 12 levels_left 13 boot_s 93.4538 worst_bits 20.6475 rms_bits 22.903 per_block_s 373.815 peak_rss_gb 48.4287
+== levels 10 budget 3,3 iters 2
+== bootstrap probe: levels after bootstrap 10, budget {3,3}, iterations 2, scale 59 bits, total depth 31, ring 131072, log2 Q 1889
+setup + keygen 45.0337 s, peak RSS 44.4006 GB
+1 iteration: 45.5084 s, worst 9.3412 bits, rms 11.8825 bits, levels left 12
+2 iterations (precision hint 11): 89.6775 s, worst 20.6143 bits, rms 22.8989 bits, levels left 11
+SUMMARY ring 131072 budget 3,3 iters 2 scale 59 levels_after_req 10 levels_left 11 boot_s 89.6775 worst_bits 20.6143 rms_bits 22.8989 per_block_s 358.71 peak_rss_gb 45.0658
+== levels 10 budget 4,4 iters 2
+== bootstrap probe: levels after bootstrap 10, budget {4,4}, iterations 2, scale 59 bits, total depth 33, ring 131072, log2 Q 2007
+setup + keygen 44.3993 s, peak RSS 43.579 GB
+1 iteration: 64.766 s, worst 9.71836 bits, rms 11.8794 bits, levels left 12
+2 iterations (precision hint 11): 147.593 s, worst 20.6453 bits, rms 22.8792 bits, levels left 11
+SUMMARY ring 131072 budget 4,4 iters 2 scale 59 levels_after_req 10 levels_left 11 boot_s 147.593 worst_bits 20.6453 rms_bits 22.8792 per_block_s 590.371 peak_rss_gb 44.2404
+== levels 10 budget 3,3 iters 1
+== bootstrap probe: levels after bootstrap 10, budget {3,3}, iterations 1, scale 59 bits, total depth 30, ring 131072, log2 Q 1830
+setup + keygen 45.0495 s, peak RSS 43.279 GB
+1 iteration: 43.4136 s, worst 9.43449 bits, rms 11.8948 bits, levels left 11
+SUMMARY ring 131072 budget 3,3 iters 1 scale 59 levels_after_req 10 levels_left 11 boot_s 43.4136 worst_bits 9.43449 rms_bits 11.8948 per_block_s 173.654 peak_rss_gb 43.8814
+== levels 8 budget 3,3 iters 2
+== bootstrap probe: levels after bootstrap 8, budget {3,3}, iterations 2, scale 59 bits, total depth 29, ring 131072, log2 Q 1772
+setup + keygen 41.49 s, peak RSS 41.0924 GB
+1 iteration: 41.2499 s, worst 9.56267 bits, rms 11.8941 bits, levels left 10
+2 iterations (precision hint 11): 83.9255 s, worst 20.5997 bits, rms 22.8919 bits, levels left 9
+SUMMARY ring 131072 budget 3,3 iters 2 scale 59 levels_after_req 8 levels_left 9 boot_s 83.9255 worst_bits 20.5997 rms_bits 22.8919 per_block_s 335.702 peak_rss_gb 41.7022
+== levels 8 budget 2,2 iters 2
+== bootstrap probe: levels after bootstrap 8, budget {2,2}, iterations 2, scale 59 bits, total depth 27, ring 131072, log2 Q 1654
+setup + keygen 106.15 s, peak RSS 103.116 GB
+1 iteration: 91.1096 s, worst 9.87443 bits, rms 11.9021 bits, levels left 10
+2 iterations (precision hint 11): 181.749 s, worst 20.5382 bits, rms 22.8881 bits, levels left 9
+SUMMARY ring 131072 budget 2,2 iters 2 scale 59 levels_after_req 8 levels_left 9 boot_s 181.749 worst_bits 20.5382 rms_bits 22.8881 per_block_s 726.998 peak_rss_gb 105.188
+== levels 6 budget 3,3 iters 2
+== bootstrap probe: levels after bootstrap 6, budget {3,3}, iterations 2, scale 59 bits, total depth 27, ring 131072, log2 Q 1654
+setup + keygen 38.848 s, peak RSS 38.8472 GB
+1 iteration: 36.5288 s, worst 9.31746 bits, rms 11.8857 bits, levels left 8
+2 iterations (precision hint 11): 69.4617 s, worst 20.3203 bits, rms 22.8986 bits, levels left 7
+SUMMARY ring 131072 budget 3,3 iters 2 scale 59 levels_after_req 6 levels_left 7 boot_s 69.4617 worst_bits 20.3203 rms_bits 22.8986 per_block_s 277.847 peak_rss_gb 39.3759
+SWEEPDONE

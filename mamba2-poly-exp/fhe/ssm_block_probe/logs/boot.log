@@ -1,0 +1,4 @@
+== bootstrap probe: levels after bootstrap 19, total depth 41, ring 131072, log2 Q 2479
+setup + keygen 51.9407 s, peak RSS 53.5162 GB
+one bootstrap: 50.6229 s, worst abs error 0.00138277 (9.49822 bits), levels left 20
+per block in a stack: 4 output ciphertexts -> 202.492 s of bootstrapping, peak RSS 54.4001 GB
