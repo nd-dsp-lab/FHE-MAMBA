@@ -311,6 +311,8 @@ class SegLUT(nn.Module):
         finally:
             self.noise_bits, self.cmp_noise_bits, self.track = saved
         err = (approx - exact).abs()
+        # ALLOW-CLAMP: both clamps here guard a REPORTED metric (log2 of a zero rmse, a 0
+        # in `exact` under max_rel) in this offline precision() check, never the forward.
         rmse = err.square().mean(dim=0).sqrt().clamp_min(1e-30)
         return {"bits": (-torch.log2(rmse)).cpu().numpy(),
                 "max_abs": err.max(dim=0).values.cpu().numpy(),
@@ -362,10 +364,21 @@ class _InvSqrtNormBase(nn.Module):
     def build_lut(self, n_seg=4, n_br=2048, boundaries="log", margin=0.05, impl="seglut",
                   ss_kw=None, **kw):
         """impl: 'seglut' = ROSETTA's table as published; 'openfhe' = the pipeline
-        fhe/seglut_invsqrt/bench.cpp runs (real_mamba/ss_invsqrt.py), Newton included."""
+        fhe/seglut_invsqrt/bench.cpp runs (real_mamba/ss_invsqrt.py), Newton included;
+        'ckks' = the CKKS-only Chebyshev fhe/ckks_invsqrt/bench.cpp runs
+        (real_mamba/ckks_invsqrt.py), ss_kw supplying target_bits, ckks_bits, range_guard."""
         if not torch.isfinite(self.v_min):
             raise RuntimeError("no calibration samples reached this norm -- the "
                                "module was never called (fused_add_norm still on?)")
+        if impl == "ckks":
+            from real_mamba.ckks_invsqrt import ChebInvSqrt
+            ss = ss_kw or {}
+            self.lut = ChebInvSqrt(float(self.v_min), float(self.v_max), margin=margin,
+                                   target_bits=ss.get("target_bits", 12.0),
+                                   ckks_bits=ss.get("ckks_bits"),
+                                   range_guard=ss.get("range_guard", False), seed=kw.get("seed", 0),
+                                   name=kw.get("name")).to(self.weight.device)
+            return self.lut
         if impl == "openfhe":
             from real_mamba.ss_invsqrt import SchemeSwitchInvSqrt
             tau = make_boundaries([float(self.v_min)], [float(self.v_max)], n_seg,

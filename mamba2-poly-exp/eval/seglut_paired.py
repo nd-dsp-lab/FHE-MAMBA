@@ -122,10 +122,13 @@ def main(argv=None) -> int:
     ap.add_argument("--noise-scale", default="abs", choices=("abs", "range", "rel"))
     ap.add_argument("--cmp-noise-bits", type=float, default=None)
     # the 1/sqrt tables as OpenFHE builds them (real_mamba/ss_invsqrt.py)
-    ap.add_argument("--invsqrt-impl", default="seglut", choices=("seglut", "openfhe"),
+    ap.add_argument("--invsqrt-impl", default="seglut", choices=("seglut", "openfhe", "ckks"),
                     help="openfhe = the fhe/seglut_invsqrt pipeline: ~5.5-bit table + "
                          "Newton; the noise/oob flags above then do not apply to 1/sqrt")
     ap.add_argument("--newton", type=int, default=2)
+    ap.add_argument("--cheb-target", type=float, default=12.0,
+                    help="--invsqrt-impl ckks: worst-case relative bits each norm's "
+                         "Chebyshev must reach on its widened range (fhe/ckks_invsqrt/design.py)")
     ap.add_argument("--fhew-noise", type=float, default=9.7,
                     help="index and phase noise in table positions; sqrt(n/18) = 8.5 at "
                          "STD128, 9.7 the worst segment bench.cpp measured")
@@ -174,6 +177,9 @@ def main(argv=None) -> int:
                   cmp_noise_bits=args.cmp_noise_bits)
     ss_kw = dict(newton=args.newton, index_noise=args.fhew_noise, phase_noise=args.fhew_noise,
                  ckks_bits=args.ckks_bits, guard=args.guard, range_guard=args.range_guard)
+    if args.invsqrt_impl == "ckks":
+        ss_kw = dict(target_bits=args.cheb_target, ckks_bits=args.ckks_bits,
+                     range_guard=args.range_guard)
 
     # ------------------------------------------------------------------ install
     ph = patch_transition(model, ExactExp(), chunk_size=args.chunk_size)
@@ -324,7 +330,7 @@ def main(argv=None) -> int:
         p = precision[fam]
         print(f"[seglut] {fam:10s} {p['n_tables']:6d} tables  bits median {p['bits_median']:5.1f} "
               f"worst {p['bits_worst']:5.1f}   max abs err worst {p['max_abs_worst']:.2e}")
-        if fam.startswith("norm_") and args.invsqrt_impl == "openfhe":
+        if fam.startswith("norm_") and args.invsqrt_impl in ("openfhe", "ckks"):
             rb = [float(t.precision()["rel_bits"][0]) for t in tables(fam)]
             p["rel_bits_median"], p["rel_bits_worst"] = float(np.median(rb)), min(rb)
             print(f"[seglut] {'':10s} relative bits median {p['rel_bits_median']:5.1f} "
@@ -337,6 +343,15 @@ def main(argv=None) -> int:
            "exact_vs_untouched_max_logit_diff": ref_diff,
            "norm_v_ranges": norm_ranges, "table_precision": precision,
            "tfhe_ops_per_element": ops, "results": {}}
+    if args.invsqrt_impl == "ckks":
+        out["ckks_choices"] = {f"{fam}.{i}": {"a": t.a, "b": t.b, "degree": t.degree,
+                                              "newton": t.newton, "depth": t.depth,
+                                              "design_worst_bits": t.design_bits}
+                               for fam in ("norm_pre", "norm_gated", "norm_f")
+                               for i, t in enumerate(tables(fam))}
+        ds = [c["depth"] for c in out["ckks_choices"].values()]
+        print(f"[ckks] 1/sqrt depth over {len(ds)} norms: median {int(np.median(ds))}, "
+              f"max {max(ds)} (RMSNorm adds 2: x^2 and x * r)")
 
     # --------------------------------------------------------------- evaluate
     with torch.no_grad():
@@ -409,6 +424,10 @@ def main(argv=None) -> int:
         print(f"1/sqrt: OpenFHE pipeline, {args.newton} Newton step(s), FHEW noise "
               f"{args.fhew_noise}, CKKS floor {args.ckks_bits} bits, guard {args.guard}, "
               f"range guard {'on' if args.range_guard else 'off'}")
+    if args.invsqrt_impl == "ckks":
+        print(f"1/sqrt: CKKS-only Chebyshev, >= {args.cheb_target:g} worst-case rel bits on each "
+              f"norm's range (log margin {args.margin}), CKKS floor {args.ckks_bits} bits, "
+              f"{'ideal range clamp' if args.range_guard else 'no guard'}")
     print("=" * 112)
     hdr = (f"{'L':>6} {'gate':>14} {'mean d ppl':>12} {'2*SEM':>9} {'verdict':>22}   "
            f"{'out-of-domain':>13} {'out<0':>9} {'out>1':>9} {'wrapped':>9}")
